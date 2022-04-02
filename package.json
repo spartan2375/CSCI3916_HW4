@@ -1,0 +1,39 @@
+{
+  "name": "hw3",
+  "version": "1.0.0",
+  "description": "[![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/19373224-c0407848-dafd-448a-b51c-5b54cb685a2b?action=collection%2Ffork&collection-url=entityId%3D19373224-c0407848-dafd-448a-b51c-5b54cb685a2b%26entityType%3Dcollection%26workspaceId%3D4eb101f1-9e5c-4fcf-9f7b-36e9d12ad3b3#?env%5BHW_3%5D=W3sia2V5IjoidG9rZW4iLCJ2YWx1ZSI6IiAiLCJlbmFibGVkIjp0cnVlLCJ0eXBlIjoiZGVmYXVsdCIsInNlc3Npb25WYWx1ZSI6IkpXVC4uLiIsInNlc3Npb25JbmRleCI6MH1d)",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/spartan2375/CSCI3916_HW3.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/spartan2375/CSCI3916_HW3/issues"
+  },
+  "homepage": "https://github.com/spartan2375/CSCI3916_HW3#readme",
+  "dependencies": {
+    "bcrypt-nodejs": "^0.0.3",
+    "body-parser": "^1.19.2",
+    "chai": "^4.3.6",
+    "chai-http": "^4.3.0",
+    "cors": "^2.8.5",
+    "crypto": "^1.0.1",
+    "dotenv": "^16.0.0",
+    "express": "^4.17.3",
+    "http": "0.0.1-security",
+    "jsonwebtoken": "^8.5.1",
+    "mocha": "^9.2.2",
+    "mongoose": "^6.2.6",
+    "passport": "^0.5.2",
+    "passport-http": "^0.3.0",
+    "passport-jwt": "^4.0.0"
+  },
+  "directories": {
+    "test": "test"
+  }
+}
