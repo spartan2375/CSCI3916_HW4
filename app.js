@@ -8,6 +8,7 @@ var cors = require("cors");
 var exp = require("constants");
 var User = require("./users");
 var Movie = require("./movies");
+var Review = require("./reviews");
 const { title } = require("process");
 
 var app = express();
@@ -33,6 +34,12 @@ function getJSONObject(req, msg) {
   if (req.body != null) json.body = req.body;
   return json;
 }
+
+var review = new Review()
+review.name = "Bob Jones"
+review.comment = "meh"
+review.rating = 3
+review.save()
 
 router
   .route("/movies/:title")

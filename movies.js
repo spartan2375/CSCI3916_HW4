@@ -9,7 +9,7 @@ try {
     process.env.DB,
     { useNewUrlParser: true, useUnifiedTopology: true },
     () => console.log("connected to mongodb from movies file")
-  );
+  )
 } catch (error) {
   console.log("could not connect from movies file");
 }
@@ -39,7 +39,7 @@ var movieSchema = new Schema({
       CharacterName: String,
     },
   ],
-  required: true,
+  
 });
 
 //return model to server
