@@ -8,8 +8,10 @@ try {
   mongoose.connect(
     process.env.DB,
     { useNewUrlParser: true, useUnifiedTopology: true },
-    () => console.log("connected to mongodb from movies file")
-  )
+    () => {
+      console.log("connected to mongodb from movies file");
+    }
+  );
 } catch (error) {
   console.log("could not connect from movies file");
 }
@@ -39,7 +41,6 @@ var movieSchema = new Schema({
       CharacterName: String,
     },
   ],
-  
 });
 
 //return model to server

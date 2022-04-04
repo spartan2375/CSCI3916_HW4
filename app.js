@@ -3,6 +3,8 @@ var bodyParser = require("body-parser");
 var passport = require("passport");
 var authController = require("./auth");
 var jwtController = require("./auth_jwt");
+var ExtractJwt = require("passport-jwt").ExtractJwt;
+var jwt_decode = require("jwt-decode");
 var jwt = require("jsonwebtoken");
 var cors = require("cors");
 var exp = require("constants");
@@ -35,48 +37,118 @@ function getJSONObject(req, msg) {
   return json;
 }
 
-var review = new Review()
-review.name = "Bob Jones"
-review.comment = "meh"
-review.rating = 3
-review.save()
+// var review = new Review();
+// review.title = "The Lego Movie";
+// review.name = "Bob Jones";
+// review.comment = "meh";
+// review.rating = 3;
+// review.save();
+
+router
+  .route("/reviews")
+  .get(function (req, res) {
+    Review.find()
+      .lean()
+      .exec(function (err, review) {
+        res.type;
+        return res.json(review);
+      });
+  })
+  .post(jwtController.isAuthenticated, function (req, res) {
+    //title, name, comment, rating
+    if (!req.body.title || !req.body.rating) {
+      res.json({
+        success: false,
+        msg: "title and rating required (comment is optional)",
+      });
+      // user is dumb
+    } else {
+      var review = new Review();
+      review.title = req.body.title;
+      review.userID = jwt_decode(req.headers.authorization)["id"];
+      if (req.body.comment) review.comment = req.body.comment;
+      review.rating = req.body.rating;
+
+      review.save();
+      res.json({ success: true, msg: "Review saved!" });
+    }
+  })
+  .delete(jwtController.isAuthenticated, function (req, res) {
+    if (!req.body.title || !req.body.name) {
+      res.json({
+        success: false,
+        msg: "movie title must be in body",
+      });
+    } else {
+      Review.findOneAndDelete({
+        title: req.body.title,
+        userID: jwt_decode(req.headers.authorization)["id"],
+      }).exec(function (err, review) {
+        if (err) {
+          console.log(err);
+          res.json(err).send();
+        } else
+          res.json({
+            success: true,
+            msg: "deleted review",
+          });
+      });
+    }
+  });
 
 router
   .route("/movies/:title")
   .get(jwtController.isAuthenticated, function (req, res) {
-    if (!req.params.title){//.body.title) {
-      Movie.find()
-        .lean()
-        .exec(function (err, movies) {
-          res.type;
-          return res.json(movies);
-        });
-      //   res.json({
-      //     success: false,
-      //     msg: "Request body MUST have a title.",
-      //   });
+    if (req.query.reviews == true) {
+      Movie.aggregate([
+        {
+          $lookup: {
+            from: "reviews",
+            localField: "title",
+            foreignField: "title",
+            as: "aggregatedReviews",
+          },
+        },
+        { $match: { title: req.params.title } },
+      ]).exec(function (err, movie_reviews) {
+        if (err) res.send(err);
+        res.json(movie_reviews);
+      });
     } else {
       Movie.findOne({ title: req.params.title }).exec(function (err, movie) {
         if (err) {
           res.send(err);
-        } else
+        } else {
           try {
             res.json({
               success: true,
+              id: movie.id,
               title: movie.title,
               year: movie.year,
               genre: movie.genre,
               actors: movie.actors,
             });
           } catch (e) {
-            console.log(e);
             res.json({
               success: false,
               msg: "Movie not found!",
             });
           }
+        }
       });
     }
+  });
+
+router
+  .route("/movies")
+  .get(jwtController.isAuthenticated, function (req, res) {
+    //.body.title) {
+    Movie.find()
+      .lean()
+      .exec(function (err, movies) {
+        res.type;
+        return res.json(movies);
+      });
   })
 
   .post(jwtController.isAuthenticated, function (req, res) {
