@@ -99,7 +99,7 @@ router
 router
   .route("/movies/:title")
   .get(jwtController.isAuthenticated, function (req, res) {
-    if (req.query.reviews == true) {
+    if (req.query.reviews == "true") {
       Movie.aggregate([
         {
           $lookup: {
