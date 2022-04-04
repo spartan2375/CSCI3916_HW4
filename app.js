@@ -37,13 +37,6 @@ function getJSONObject(req, msg) {
   return json;
 }
 
-// var review = new Review();
-// review.title = "The Lego Movie";
-// review.name = "Bob Jones";
-// review.comment = "meh";
-// review.rating = 3;
-// review.save();
-
 router
   .route("/reviews")
   .get(function (req, res) {
@@ -55,13 +48,11 @@ router
       });
   })
   .post(jwtController.isAuthenticated, function (req, res) {
-    //title, name, comment, rating
     if (!req.body.title || !req.body.rating) {
       res.json({
         success: false,
         msg: "title and rating required (comment is optional)",
       });
-      // user is dumb
     } else {
       Movie.findOne({ title: req.body.title }).exec(function (err, movie) {
         if (err) {
@@ -70,14 +61,11 @@ router
           try {
             res.json({
               success: true,
-              id: movie.id,
+              msg: "Review saved!",
               title: movie.title,
-              year: movie.year,
-              genre: movie.genre,
-              actors: movie.actors,
             });
           } catch (e) {
-            res.json({
+            return res.json({
               success: false,
               msg: "Movie not found!",
             });
@@ -91,7 +79,6 @@ router
       review.rating = req.body.rating;
 
       review.save();
-      res.json({ success: true, msg: "Review saved!" });
     }
   })
   .delete(jwtController.isAuthenticated, function (req, res) {
