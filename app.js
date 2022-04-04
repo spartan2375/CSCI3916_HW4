@@ -70,15 +70,14 @@ router
               msg: "Movie not found!",
             });
           }
+          var review = new Review();
+          review.title = req.body.title;
+          review.userID = jwt_decode(req.headers.authorization)["id"];
+          if (req.body.comment) review.comment = req.body.comment;
+          review.rating = req.body.rating;
+          review.save();
         }
       });
-      var review = new Review();
-      review.title = req.body.title;
-      review.userID = jwt_decode(req.headers.authorization)["id"];
-      if (req.body.comment) review.comment = req.body.comment;
-      review.rating = req.body.rating;
-
-      review.save();
     }
   })
   .delete(jwtController.isAuthenticated, function (req, res) {
