@@ -63,6 +63,27 @@ router
       });
       // user is dumb
     } else {
+      Movie.findOne({ title: req.body.title }).exec(function (err, movie) {
+        if (err) {
+          res.send(err);
+        } else {
+          try {
+            res.json({
+              success: true,
+              id: movie.id,
+              title: movie.title,
+              year: movie.year,
+              genre: movie.genre,
+              actors: movie.actors,
+            });
+          } catch (e) {
+            res.json({
+              success: false,
+              msg: "Movie not found!",
+            });
+          }
+        }
+      });
       var review = new Review();
       review.title = req.body.title;
       review.userID = jwt_decode(req.headers.authorization)["id"];
